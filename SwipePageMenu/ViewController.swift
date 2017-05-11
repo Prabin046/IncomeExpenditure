@@ -19,6 +19,10 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        barBtnMenu.target = revealViewController()
+        barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
+        
+
         // Do any additional setup after loading the view, typically from a nib.
         
         // Array to keep track of controllers in page menu
@@ -62,13 +66,18 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
         
         
         
-        barBtnMenu.target = self.revealViewController()
+        barBtnMenu.target = revealViewController()
         barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
         
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        
+        //let nextVC = self.storyboard?.instantiateViewControllerWithIdentifier("TotalViewController") as! TotalViewController
+        // self.presentViewController(nextVC, animated: true, completion: nil)
            }
 
+    @IBAction func barBtnEdit(sender: AnyObject) {
+        //let nextVC = self.storyboard?.instantiateViewControllerWithIdentifier("TableViewControllerEditServices") as! TableViewControllerEditServices
+       // self.navigationController?.presentViewController(nextVC, animated: true, completion: nil)
+    }
     @IBAction func barbtnResult(sender: AnyObject) {
         //let nextVC = self.storyboard?.instantiateViewControllerWithIdentifier("TotalViewController") as! TotalViewController
        // self.presentViewController(nextVC, animated: true, completion: nil)

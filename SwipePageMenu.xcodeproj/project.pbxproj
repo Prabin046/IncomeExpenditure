@@ -11,10 +11,11 @@
 		370271181EBC8445001920AE /* TableViewCellResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370271171EBC8445001920AE /* TableViewCellResult.swift */; };
 		37068DA31EB710FA004FD96D /* TotalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37068DA21EB710FA004FD96D /* TotalViewController.swift */; };
 		37570D3B1EB8951000A8F24F /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37570D3A1EB8951000A8F24F /* SWRevealViewController.m */; };
-		37570D3D1EB8ABFE00A8F24F /* MenuTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37570D3C1EB8ABFE00A8F24F /* MenuTableVC.swift */; };
 		37A49DDC1EC2E208002773BF /* TableViewControllerEditServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A49DDB1EC2E208002773BF /* TableViewControllerEditServices.swift */; };
 		37A49DE21EC2FECE002773BF /* TableViewCellEditServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A49DE11EC2FECE002773BF /* TableViewCellEditServices.swift */; };
 		37A49DE41EC307D2002773BF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37A49DE31EC307D2002773BF /* Main.storyboard */; };
+		37C349E71EC4464E0098DA05 /* MenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C349E61EC4464E0098DA05 /* MenuTableViewCell.swift */; };
+		37C349E91EC457020098DA05 /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37C349E81EC457020098DA05 /* MenuTableViewController.swift */; };
 		37CB3A171EB3126E00F252F7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CB3A161EB3126E00F252F7 /* AppDelegate.swift */; };
 		37CB3A191EB3126E00F252F7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CB3A181EB3126E00F252F7 /* ViewController.swift */; };
 		37CB3A1F1EB3126E00F252F7 /* SwipePageMenu.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37CB3A1D1EB3126E00F252F7 /* SwipePageMenu.xcdatamodeld */; };
@@ -55,10 +56,11 @@
 		37068DA21EB710FA004FD96D /* TotalViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TotalViewController.swift; sourceTree = "<group>"; };
 		37570D391EB8951000A8F24F /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		37570D3A1EB8951000A8F24F /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
-		37570D3C1EB8ABFE00A8F24F /* MenuTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableVC.swift; sourceTree = "<group>"; };
 		37A49DDB1EC2E208002773BF /* TableViewControllerEditServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewControllerEditServices.swift; sourceTree = "<group>"; };
 		37A49DE11EC2FECE002773BF /* TableViewCellEditServices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCellEditServices.swift; sourceTree = "<group>"; };
 		37A49DE31EC307D2002773BF /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		37C349E61EC4464E0098DA05 /* MenuTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewCell.swift; sourceTree = "<group>"; };
+		37C349E81EC457020098DA05 /* MenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
 		37CB3A131EB3126D00F252F7 /* SwipePageMenu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwipePageMenu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37CB3A161EB3126E00F252F7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		37CB3A181EB3126E00F252F7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -166,10 +168,11 @@
 				37CB3A4F1EB339B100F252F7 /* CollectionViewCellOne.swift */,
 				37CB3A511EB34C6200F252F7 /* CollectionViewCellTwo.swift */,
 				37068DA21EB710FA004FD96D /* TotalViewController.swift */,
-				37570D3C1EB8ABFE00A8F24F /* MenuTableVC.swift */,
 				370271171EBC8445001920AE /* TableViewCellResult.swift */,
 				37A49DDB1EC2E208002773BF /* TableViewControllerEditServices.swift */,
 				37A49DE11EC2FECE002773BF /* TableViewCellEditServices.swift */,
+				37C349E61EC4464E0098DA05 /* MenuTableViewCell.swift */,
+				37C349E81EC457020098DA05 /* MenuTableViewController.swift */,
 			);
 			path = SwipePageMenu;
 			sourceTree = "<group>";
@@ -465,7 +468,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				370271181EBC8445001920AE /* TableViewCellResult.swift in Sources */,
-				37570D3D1EB8ABFE00A8F24F /* MenuTableVC.swift in Sources */,
+				37C349E91EC457020098DA05 /* MenuTableViewController.swift in Sources */,
+				37C349E71EC4464E0098DA05 /* MenuTableViewCell.swift in Sources */,
 				37CB3A1F1EB3126E00F252F7 /* SwipePageMenu.xcdatamodeld in Sources */,
 				37A49DE21EC2FECE002773BF /* TableViewCellEditServices.swift in Sources */,
 				37CB3A501EB339B100F252F7 /* CollectionViewCellOne.swift in Sources */,

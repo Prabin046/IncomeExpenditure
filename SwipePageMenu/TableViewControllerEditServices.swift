@@ -14,6 +14,9 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
 
     @IBOutlet weak var tableView: UITableView!
        
+    
+    @IBOutlet weak var barBtnMenu: UIBarButtonItem!
+     
     var nameArray: [String] = []
     var priceArray: [String] = []
     
@@ -22,6 +25,9 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        barBtnMenu.target = revealViewController()
+        barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
+        
         
         let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext

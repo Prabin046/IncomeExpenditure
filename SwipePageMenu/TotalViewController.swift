@@ -22,6 +22,8 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
     var tempExpense = 0
     let date : String = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.MediumStyle, timeStyle: NSDateFormatterStyle.NoStyle)
     
+    
+    @IBOutlet weak var barBtnMenu: UIBarButtonItem!
     @IBOutlet weak var tableViewIncomeExpense: UITableView!
     @IBOutlet weak var lbIncomeTEst: UILabel!
     @IBOutlet weak var lbIncome: UILabel!
@@ -33,6 +35,9 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        barBtnMenu.target = revealViewController()
+        barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
         //lbIncome.text = String(defaults.objectForKey("income"))
 
         //lbIncome.text = incomeCV.tbResult.text
