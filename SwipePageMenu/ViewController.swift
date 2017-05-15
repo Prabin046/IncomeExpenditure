@@ -14,11 +14,13 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
     
     var pageMenu : CAPSPageMenu?
     
+    @IBOutlet weak var myView: UIView!
     @IBOutlet weak var barBtnMenu: UIBarButtonItem!
     @IBOutlet weak var barbtnResult: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //navigationController?.navigationBar.hidden = true
         barBtnMenu.target = revealViewController()
         barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
         
@@ -34,12 +36,12 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
         // Make sure the title property of all view controllers is set
         // Example:
         var controller1 : UIViewController = (self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerOne"))!
-        controller1.title = "First Page"
+        controller1.title = "Income"
         controllerArray.append(controller1)
         
         var controller2 : UIViewController = (self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerTwo"))!
 
-        controller2.title = "Second Page"
+        controller2.title = "Expense"
         controllerArray.append(controller2)
         
         // Customize page menu to your liking (optional) or use default settings by sending nil for 'options' in the init
@@ -55,7 +57,7 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
         
         // Lastly add page menu as subview of base view controller view
         // or use pageMenu controller in you view hierachy as desired
-        self.view.addSubview(pageMenu!.view)
+        self.myView.addSubview(pageMenu!.view)
         
         pageMenu!.delegate = self
         
@@ -69,7 +71,7 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
         barBtnMenu.target = revealViewController()
         barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
         
-        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        //self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         //let nextVC = self.storyboard?.instantiateViewControllerWithIdentifier("TotalViewController") as! TotalViewController
         // self.presentViewController(nextVC, animated: true, completion: nil)
            }

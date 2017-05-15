@@ -10,12 +10,13 @@ import UIKit
 import CoreData
 import Foundation
 
+
 class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UITableViewDataSource{
 
     @IBOutlet weak var tableView: UITableView!
        
     
-    @IBOutlet weak var barBtnMenu: UIBarButtonItem!
+    
      
     var nameArray: [String] = []
     var priceArray: [String] = []
@@ -25,9 +26,7 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        barBtnMenu.target = revealViewController()
-        barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
-        
+       
         
         let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
@@ -63,8 +62,13 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
         cell.lbPrice.text = priceArray[indexPath.row]
         return cell
     }
+   
     
-    
+    override func viewWillAppear(animated: Bool) {
+       
+        self.navigationItem.hidesBackButton = false
+        self.navigationItem.title = "Add/Edit Services"
+    }
 
     
    

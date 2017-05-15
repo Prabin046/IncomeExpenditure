@@ -37,23 +37,28 @@ class MenuTableViewController: UIViewController, UITableViewDelegate, UITableVie
             let desController = mainStoryBoard.instantiateViewControllerWithIdentifier("ViewController") as! ViewController
             let newFrontViewController = UINavigationController.init(rootViewController: desController)
             revealViewController.pushFrontViewController(newFrontViewController, animated: true)
+            
          }
         
         
         if cell.lbMenuItem.text == "Result"
-        {
+        {/*
             let mainStoryBoard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let desController = mainStoryBoard.instantiateViewControllerWithIdentifier("TotalViewController") as! TotalViewController
             let newFrontViewController = UINavigationController.init(rootViewController: desController)
             revealViewController.pushFrontViewController(newFrontViewController, animated: true)
+ */
         }
         
         if cell.lbMenuItem.text == "Edit"
         {
+            /*
             let mainStoryBoard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let desController = mainStoryBoard.instantiateViewControllerWithIdentifier("TableViewControllerEditServices") as! TableViewControllerEditServices
             let newFrontViewController = UINavigationController.init(rootViewController: desController)
             revealViewController.pushFrontViewController(newFrontViewController, animated: true)
+ */
+            
         }
 
 

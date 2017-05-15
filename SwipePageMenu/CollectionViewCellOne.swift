@@ -13,6 +13,8 @@ class CollectionViewCellOne: UICollectionViewCell {
     
     @IBOutlet weak var lbNumber: UILabel!
     @IBOutlet weak var Image1: UIImageView!
+   
+    @IBOutlet weak var lbName: UILabel!
     
     
 }

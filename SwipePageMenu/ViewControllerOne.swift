@@ -14,6 +14,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
 
    
     
+   
     var nameArray: [String] = []
     var priceArray: [String] = []
     @IBOutlet weak var tbResult: UITextField!
@@ -62,7 +63,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+       //navigationController?.navigationBar.hidden = true
         let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
        /*
@@ -133,7 +134,8 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! CollectionViewCellOne
         //cell.Image1?.image = self.imageArray[indexPath.row]
         cell.Image1?.image = UIImage(named: nameArray[indexPath.row])
-        cell.lbNumber?.text = self.priceArray[indexPath.row]
+        cell.lbName?.text = self.nameArray[indexPath.row]
+        cell.lbNumber?.text = "Rs. " + self.priceArray[indexPath.row]
         return cell
     }
     

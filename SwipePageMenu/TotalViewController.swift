@@ -23,7 +23,7 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
     let date : String = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.MediumStyle, timeStyle: NSDateFormatterStyle.NoStyle)
     
     
-    @IBOutlet weak var barBtnMenu: UIBarButtonItem!
+    
     @IBOutlet weak var tableViewIncomeExpense: UITableView!
     @IBOutlet weak var lbIncomeTEst: UILabel!
     @IBOutlet weak var lbIncome: UILabel!
@@ -36,14 +36,14 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        barBtnMenu.target = revealViewController()
-        barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
+       // barBtnMenu.target = revealViewController()
+      //  barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
         //lbIncome.text = String(defaults.objectForKey("income"))
 
         //lbIncome.text = incomeCV.tbResult.text
         // Do any additional setup after loading the view.
-        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-        
+       // self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        //self.navigationItem.hidesBackButton = false
         let appDele : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context : NSManagedObjectContext = appDele.managedObjectContext
 
@@ -124,8 +124,9 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
     
     
     override func viewWillAppear(animated: Bool) {
-        
-        self.navigationController?.navigationBar.hidden = false
+        //self.navigationController?.navigationBarHidden = true
+        self.navigationItem.hidesBackButton = false
+        self.navigationItem.title = "Income/Expense Report"
           }
 
     override func didReceiveMemoryWarning() {
@@ -133,6 +134,6 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
         // Dispose of any resources that can be recreated.
     }
    
-    
+   
 
 }
