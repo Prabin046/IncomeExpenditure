@@ -117,13 +117,19 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
         cell.lbPriceTableCell.text = priceArray[indexPath.row]
         cell.lbSnTableCell.text = dateArray[indexPath.row]
         
-        
+        if (isIncomeArray[indexPath.row] == "1")
+        {
+            cell.lbPriceTableCell.textColor = UIColor.blackColor()
+        }else{
+            cell.lbPriceTableCell.textColor = UIColor.redColor()
+        }
         return(cell)
             }
     
     
     
     override func viewWillAppear(animated: Bool) {
+        self.tableViewIncomeExpense.reloadData()
         //self.navigationController?.navigationBarHidden = true
         self.navigationItem.hidesBackButton = false
         self.navigationItem.title = "Income/Expense Report"

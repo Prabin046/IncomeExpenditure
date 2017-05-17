@@ -26,8 +26,12 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        loadServicesInArray() 
+        self.tableView.reloadData()
         
+            }
+    
+    func loadServicesInArray()  {
         let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
         
@@ -45,13 +49,13 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
                     
                     nameArray.append(name)
                     priceArray.append(price)
-        }
+                }
             }
         }catch{
             print("Error...!")
         }
-        
-            }
+
+    }
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return nameArray.count
     }
@@ -62,14 +66,33 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
         cell.lbPrice.text = priceArray[indexPath.row]
         return cell
     }
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        //let nextVC = self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerAddServices") as! ViewControllerAddServices
+               // nextVC.tbName.text = String(nameArray[indexPath.row])
+               //nextVC.tbPrice.text = priceArray[indexPath.row]
+        
+        gotoAddServices()
+    }
    
     
     override func viewWillAppear(animated: Bool) {
-       
+        self.tableView.reloadData()
+        self.navigationController?.navigationBar.hidden = false
         self.navigationItem.hidesBackButton = false
         self.navigationItem.title = "Add/Edit Services"
+        
+        let testUIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target:self, action: #selector(TableViewControllerEditServices.gotoAddServices))
+        self.navigationItem.rightBarButtonItem  = testUIBarButtonItem
     }
-
+    override func viewWillDisappear(animated: Bool) {
+        self.navigationItem.title = nil
+    }
+    func  gotoAddServices() {
+        
+        performSegueWithIdentifier("segueAddServices", sender: self)
+        
+    }
+    
     
    
 }

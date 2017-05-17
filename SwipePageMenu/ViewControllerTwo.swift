@@ -7,69 +7,114 @@
 //
 
 import UIKit
+import CoreData
+import Foundation
 
 class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    var nameArray: [String] = []
+    var priceArray: [String] = []
     let defaults = NSUserDefaults.standardUserDefaults()
     @IBOutlet weak var tbResult2: UITextField!
     @IBOutlet weak var collectionView2: UICollectionView!
     @IBOutlet var viewControllerTwo: UIView!
-    let numbers = ["100", "200", "250","300","500"]
-    let imageArray = [UIImage(named: "1"),UIImage(named: "2"),UIImage(named: "3"),UIImage(named: "4"),UIImage(named: "5")]
+    
+    internal var noOfDataInTable = Int()
+    let date : String = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.MediumStyle, timeStyle: NSDateFormatterStyle.NoStyle)
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-               // Do any additional setup after loading the view.
+        let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context : NSManagedObjectContext = appDel.managedObjectContext
+
+        do{
+            let request = NSFetchRequest(entityName: "TblServices")
+            let results = try context.executeFetchRequest(request)
+            
+            if results.count > 0 {
+                for item in results as! [NSManagedObject]{
+                    
+                    
+                    let name  = String(item.valueForKey("name")!)
+                    let price = String(item.valueForKey("price")!)
+                    
+                    
+                    nameArray.append(name)
+                    priceArray.append(price)
+                    
+                    
+                    
+                    //lbIncome.text = String(name!)
+                    //lbExpense.text = String(price!)
+                    // print(name!, price!)
+                    
+                }
+            }
+        }catch{
+            print("Error...!")
+        }
+
     }
     
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.numbers.count
+        return self.nameArray.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-       
-        
-        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell2", forIndexPath: indexPath) as! CollectionViewCellTwo
-        cell.Image2?.image = self.imageArray[indexPath.row]
-        cell.lbNumber2?.text = self.numbers[indexPath.row]
+       
+        cell.Image2?.image = UIImage(named: nameArray[indexPath.row])
+        cell.lbName2?.text = self.nameArray[indexPath.row]
+        cell.lbNumber2?.text = "Rs. " + self.priceArray[indexPath.row]
         return cell
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
-        
-        if(tbResult2.text == "Result")
-        {
-            tbResult2.text = "0"
+        let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context : NSManagedObjectContext = appDel.managedObjectContext
+
+        tbResult2.text = "Rs -" + priceArray[indexPath.row]
+        //COUNTING NO OF DATA IN TABLE
+        do{
+            let request = NSFetchRequest(entityName: "Entity")
+            let results = try context.executeFetchRequest(request)
+            noOfDataInTable = results.count + 1
+
+        }catch{
+            print("Error...!")
         }
         
-            let a = Int(tbResult2.text!)
-            let b = Int(numbers[indexPath.row])!
-            let sub : Int = (a! - b)
-            tbResult2.text = String(sub)
-             defaults.setObject(tbResult2.text, forKey: "expense")
-            
+        let newEntry = NSEntityDescription.insertNewObjectForEntityForName("Entity", inManagedObjectContext: context)
+        newEntry.setValue(noOfDataInTable, forKey: "id")
+        
+        
+        newEntry.setValue(nameArray[indexPath.row], forKey: "name")
+        
+        newEntry.setValue(Float(priceArray[indexPath.row]), forKey: "price")
+        newEntry.setValue(0, forKey: "isIncome")
+        newEntry.setValue(date, forKey: "date")
+        
+        
+        do{
+            try context.save()
+        }catch{
+            print("Error...!")
+        }
+        
+   
         
     }
     
 
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewWillAppear(animated: Bool) {
+        tbResult2.text = "Rs "
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    override func viewWillDisappear(animated: Bool) {
+        tbResult2.text = "Rs "
     }
-    */
 
 }
