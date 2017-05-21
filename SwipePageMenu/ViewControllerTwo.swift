@@ -12,6 +12,13 @@ import Foundation
 
 class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
+    
+    var collectionView: UICollectionView?
+    var screenSize: CGRect!
+    var screenWidth: CGFloat!
+    var screenHeight: CGFloat!
+    
+    
     var nameArray: [String] = []
     var priceArray: [String] = []
     let defaults = NSUserDefaults.standardUserDefaults()
@@ -25,6 +32,19 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        screenSize = UIScreen.mainScreen().bounds
+        screenWidth = screenSize.width
+        screenHeight = screenSize.height
+        
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.itemSize = CGSize(width: (screenWidth/3)-15, height: (screenWidth/3)-15)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        collectionView2!.collectionViewLayout = layout
 
         let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
@@ -45,11 +65,7 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
                     priceArray.append(price)
                     
                     
-                    
-                    //lbIncome.text = String(name!)
-                    //lbExpense.text = String(price!)
-                    // print(name!, price!)
-                    
+                                       
                 }
             }
         }catch{

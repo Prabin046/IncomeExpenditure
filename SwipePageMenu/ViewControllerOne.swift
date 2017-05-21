@@ -9,9 +9,16 @@
 import UIKit
 import CoreData
 import Foundation
+    
 
-class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
+class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, delegateLoadServicesInArray{
 
+    var collectionView: UICollectionView?
+    var screenSize: CGRect!
+    var screenWidth: CGFloat!
+    var screenHeight: CGFloat!
+    
+    var tblServices = [TblServices]()
     var nameArray: [String] = []
     var priceArray: [String] = []
     var imageArray: [String] = []
@@ -22,21 +29,10 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     internal var noOfDataInTable = Int()
     let date : String = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.MediumStyle, timeStyle: NSDateFormatterStyle.NoStyle)
 
+    let moContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
     
-       let name = ["कपाल काटेको",
-                "बच्चाको कपाल काटेको (१० बर्ष मुनिको )",
-                "दार्ही काटेको",
-                "सेम्पु गरेको",
-                "हेयर डराई गरेको",
-                "कपाल कालो गरेको",
-                "कपाल रातो गरेको",
-                "फेसियल गरेको",
-                "फेसवास गरेको",
-                "फचे ब्लीच गरेको"
-               ]
-    let numbers = ["100", "70", "60","100","100", "350", "450","800","250", "450"]
     
-   
+    
     
     
     let defaults = NSUserDefaults.standardUserDefaults()
@@ -44,17 +40,39 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       //navigationController?.navigationBar.hidden = true
+        
         
 
-        
+        //InsertServicesInDatabaseForFirstTime()
+        //loadServicesInArray()
         
        // self.btnResult.layer.cornerRadius = self.btnResult.frame.width/2
         //self.btnResult.clipsToBounds = true
+        
+        
+        //Codes for Layout of HomePage
+        screenSize = UIScreen.mainScreen().bounds
+        screenWidth = screenSize.width
+        screenHeight = screenSize.height
+        
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.itemSize = CGSize(width: (screenWidth/3)-15, height: (screenWidth/3)-15)
+        layout.minimumInteritemSpacing = 10
+        layout.minimumLineSpacing = 10
+        collectionView1!.collectionViewLayout = layout
     
     }
+    
+    
+    
+    
     //Saving Data In Database For the First Time
     func InsertServicesInDatabaseForFirstTime()  {
+        let name = ["कपाल काटेको","बच्चाको कपाल काटेको (१० बर्ष मुनिको )","दार्ही काटेको","सेम्पु गरेको","हेयर डराई गरेको","कपाल कालो गरेको","कपाल रातो गरेको","फेसियल गरेको","फेसवास गरेको","फचे ब्लीच गरेको"]
+        let numbers = ["100", "70", "60","100","100", "350", "450","800","250", "450"]
+        
+
         let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
         
@@ -65,6 +83,8 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
          newEntry.setValue(name[i], forKey: "name")
          newEntry.setValue(numbers[i], forKey: "price")
          newEntry.setValue(String(i + 1), forKey: "image")
+         newEntry.setValue(1, forKey: "isIncome")
+         newEntry.setValue(1, forKey: "active")
         
             do{
          try context.save()
@@ -76,47 +96,33 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
 
     }
     func loadServicesInArray()  {
-        let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let context : NSManagedObjectContext = appDel.managedObjectContext
-                do{
-            let request = NSFetchRequest(entityName: "TblServices")
-            let results = try context.executeFetchRequest(request)
-            
-            if results.count > 0 {
-                for item in results as! [NSManagedObject]{
-                    
-                    
-                    let name  = String(item.valueForKey("name")!)
-                    let price = String(item.valueForKey("price")!)
-                    let image = String(item.valueForKey("image")!)
-                    
-                    nameArray.append(name)
-                    priceArray.append(price)
-                    imageArray.append(image)
-                    
-                    
-                    
-                }
-            }
+        
+        
+        let request = NSFetchRequest(entityName: "TblServices")
+        let predicate = NSPredicate(format: "active contains 1")
+        request.predicate = predicate
+        
+        do{
+            try tblServices = moContext.executeFetchRequest(request) as! [TblServices]
         }catch{
             print("Error...!")
         }
-        
+        self.collectionView1.reloadData()
 
-    }
+        }
     
     
 
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.nameArray.count
+        return tblServices.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! CollectionViewCellOne
-        //cell.Image1?.image = self.imageArray[indexPath.row]
-        cell.Image1?.image = UIImage(named: imageArray[indexPath.row])
-        cell.lbName?.text = self.nameArray[indexPath.row]
-        cell.lbNumber?.text = "Rs. " + self.priceArray[indexPath.row]
+        let tblService1 = tblServices[indexPath.row]
+        cell.Image1?.image = UIImage(named: tblService1.image)
+        cell.lbName?.text = tblService1.name
+        cell.lbNumber?.text = "Rs. " + tblService1.price
         return cell
     }
     
@@ -128,9 +134,11 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         let context : NSManagedObjectContext = appDel.managedObjectContext
         
         
+        let tblService1 = tblServices[indexPath.row]
         
+        tbResult.text = "Rs " + tblService1.price
         
-        tbResult.text = "Rs " + priceArray[indexPath.row]
+        //tbResult.text = "Rs " + priceArray[indexPath.row]
         //COUNTING NO OF DATA IN TABLE
         do{
             let request = NSFetchRequest(entityName: "Entity")
@@ -147,9 +155,9 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         newEntry.setValue(noOfDataInTable, forKey: "id")
         
         
-        newEntry.setValue(nameArray[indexPath.row], forKey: "name")
+        newEntry.setValue(tblService1.name, forKey: "name")
         
-        newEntry.setValue(Float(priceArray[indexPath.row]), forKey: "price")
+        newEntry.setValue(Float(tblService1.price), forKey: "price")
         newEntry.setValue(1, forKey: "isIncome")
         newEntry.setValue(date, forKey: "date")
         
@@ -160,18 +168,12 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
             print("Error...!")
         }
         
+    }
         
-    }
-    
    
-    override func viewDidAppear(animated: Bool) {
-        loadServicesInArray()
-        self.collectionView1.reloadData()
-       
-    }
     
-    override func viewWillDisappear(animated: Bool) {
+       override func viewWillDisappear(animated: Bool) {
         tbResult.text = "Rs "
     }
-  
+   
 }

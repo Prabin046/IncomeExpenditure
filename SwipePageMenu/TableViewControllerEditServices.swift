@@ -17,66 +17,94 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
        
     
     
-     
-    var nameArray: [String] = []
-    var priceArray: [String] = []
-    
+    let moContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    //var nameArray: [String] = []
+    //var priceArray: [String] = []
+    var tblServices = [TblServices]()
+    var tblServicesdelete:TblServices?
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadServicesInArray() 
-        self.tableView.reloadData()
+        
+        
         
             }
     
     func loadServicesInArray()  {
-        let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let context : NSManagedObjectContext = appDel.managedObjectContext
+       
+        let request = NSFetchRequest(entityName: "TblServices")
+        let predicate = NSPredicate(format: "active contains 1")
+        request.predicate = predicate
         
         do{
-            let request = NSFetchRequest(entityName: "TblServices")
-            let results = try context.executeFetchRequest(request)
-            
-            if results.count > 0 {
-                for item in results as! [NSManagedObject]{
-                    
-                    
-                    let name  = String(item.valueForKey("name")!)
-                    let price = String(item.valueForKey("price")!)
-                    
-                    
-                    nameArray.append(name)
-                    priceArray.append(price)
-                }
-            }
+            try tblServices = moContext.executeFetchRequest(request) as! [TblServices]
         }catch{
             print("Error...!")
         }
-
+       self.tableView.reloadData()
+    
+        
+        
     }
+    
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return nameArray.count
+        return tblServices.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! TableViewCellEditServices
-        cell.lbName.text = nameArray[indexPath.row]
-        cell.lbPrice.text = priceArray[indexPath.row]
+        let tblService1 = tblServices[indexPath.row]
+        cell.lbName?.text = tblService1.name
+        cell.lbPrice.text = tblService1.price
         return cell
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //let nextVC = self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerAddServices") as! ViewControllerAddServices
-               // nextVC.tbName.text = String(nameArray[indexPath.row])
-               //nextVC.tbPrice.text = priceArray[indexPath.row]
         
-        gotoAddServices()
     }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        //let indexpath = self.tableView.indexPathForSelectedRow!
+        let row = indexPath.row
+        tblServicesdelete = tblServices[row]
+        if editingStyle == UITableViewCellEditingStyle.Delete
+        {
+            
+            
+            // Set the attributes
+            tblServicesdelete?.active = Bool(0)
+            //Finally we issue the command to save the data
+            
+            
+            //Save the Object
+            do{
+                try moContext.save()
+                loadServicesInArray()
+            }catch{
+                print("Error...!")
+            }
+            
+            
+        }
+    }
+    
+    /*
+     
+     
+     */
+    
+    
    
     
     override func viewWillAppear(animated: Bool) {
-        self.tableView.reloadData()
+        loadServicesInArray()
         self.navigationController?.navigationBar.hidden = false
         self.navigationItem.hidesBackButton = false
         self.navigationItem.title = "Add/Edit Services"
@@ -93,6 +121,16 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
         
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "segueEditServices"
+        {
+            let v = segue.destinationViewController as! ViewControllerAddServices
+            let indexpath = self.tableView.indexPathForSelectedRow!
+            let row = indexpath.row
+            v.tblServices = tblServices[row]
+        }
+    }
     
-   
+
+
 }

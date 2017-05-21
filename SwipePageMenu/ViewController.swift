@@ -9,22 +9,29 @@
 import UIKit
 import PageMenu
 
+protocol delegateLoadServicesInArray {
+    func loadServicesInArray()
+}
+
 
 class ViewController: UIViewController, CAPSPageMenuDelegate{
     
+    var delegate: delegateLoadServicesInArray?
     var pageMenu : CAPSPageMenu?
+    
+    
     
     @IBOutlet weak var myView: UIView!
     @IBOutlet weak var barBtnMenu: UIBarButtonItem!
     @IBOutlet weak var barbtnResult: UIBarButtonItem!
 
-    override func viewDidLoad() {
+    
+          override func viewDidLoad() {
         super.viewDidLoad()
         //navigationController?.navigationBar.hidden = true
         barBtnMenu.target = revealViewController()
         barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
-        
-
+       
         // Do any additional setup after loading the view, typically from a nib.
         
         // Array to keep track of controllers in page menu
@@ -35,18 +42,19 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
         // (Can be any UIViewController subclass)
         // Make sure the title property of all view controllers is set
         // Example:
-        var controller1 : UIViewController = (self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerOne"))!
+        let controller1 : ViewControllerOne = (self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerOne")) as! ViewControllerOne
+            self.delegate = controller1
         controller1.title = "Income"
         controllerArray.append(controller1)
         
-        var controller2 : UIViewController = (self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerTwo"))!
+        let controller2 : UIViewController = (self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerTwo"))!
 
         controller2.title = "Expense"
         controllerArray.append(controller2)
         
         // Customize page menu to your liking (optional) or use default settings by sending nil for 'options' in the init
         // Example:
-       var parameters: [CAPSPageMenuOption] = [
+       let parameters: [CAPSPageMenuOption] = [
             .MenuItemSeparatorWidth(4.3),
             .UseMenuLikeSegmentedControl(true),
             .MenuItemSeparatorPercentageHeight(0.1)
@@ -60,11 +68,6 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
         self.myView.addSubview(pageMenu!.view)
         
         pageMenu!.delegate = self
-        
-        
-        func willMoveToPage(controller: UIViewController, index: Int){}
-        
-        func didMoveToPage(controller: UIViewController, index: Int){}
         
         
         
@@ -88,7 +91,21 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    func willMoveToPage(controller: UIViewController, index: Int){
+        
+    }
+    
+    func didMoveToPage(controller: UIViewController, index: Int){
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        delegate?.loadServicesInArray()
+        
+    }
 
-
+    
 }
 

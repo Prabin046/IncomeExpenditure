@@ -16,6 +16,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     @IBOutlet weak var imageViewSelected: UIImageView!
     @IBOutlet weak var collectionViewAddServices: UICollectionView!
     
+    var tblServices:TblServices?
     var tblServicesCount = [TblServices]()
     internal var noOfDataInTable = Int()
     var tempImageName = 0
@@ -26,8 +27,27 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     var donebuttonCheck = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewControllerAddServices.dismissKeyboard))
+        
+        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
+        tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
+        
+        
+        if let t = tblServices
+        {
+            tbName.text = t.name
+            tbPrice.text = t.price
+            imageViewSelected.image = UIImage(named: t.image)
+        }
         noOfDataInTable = CountNoOfData()
         // Do any additional setup after loading the view.
+    }
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     func  gotoEditServices() {
         SaveServicesInDatabase()
@@ -37,18 +57,20 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     
     func SaveServicesInDatabase()  {
         //Get the Description of the entity
+        if (tblServices == nil)
+        {
         let tblServicesDescription = NSEntityDescription.entityForName("TblServices", inManagedObjectContext: moContext)
         // Creating Managed Object to be inserted into the core data
-        let tblServices = TblServices(entity: tblServicesDescription!, insertIntoManagedObjectContext: moContext)
-        
+        tblServices = TblServices(entity: tblServicesDescription!, insertIntoManagedObjectContext: moContext)
+        }
         
         // Set the attributes
-        tblServices.id = String(noOfDataInTable)
-        print(tblServices.id)
-        tblServices.name = tbName.text!
-        tblServices.price = tbPrice.text!
-        tblServices.image = String(tempImageName)
-        tblServices.isIncome = Bool(1)
+        tblServices?.id = String(noOfDataInTable)
+        tblServices?.name = tbName.text!
+        tblServices?.price = tbPrice.text!
+        tblServices?.image = String(tempImageName)
+        tblServices?.isIncome = Bool(1)
+        tblServices?.active = Bool(1)
         //Finally we issue the command to save the data
         
         
@@ -63,17 +85,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     
     
     
-    func CountNoOfData() -> Int {
-        let request = NSFetchRequest(entityName: "TblServices")
-        
-        
-        do{
-            try tblServicesCount = moContext.executeFetchRequest(request) as! [TblServices]
-        }catch{
-            print("Error...!")
-        }
-        return tblServicesCount.count + 1
-    }
+   
     
     
     
@@ -108,7 +120,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     }
     
     func checkAllField() {
-        if(tbPrice.text != "" && tbName.text != "" && tempImageName != 0)
+        if(tbPrice.text != "" && tbName.text != "" && imageViewSelected.image != nil)
         {
             let testUIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target:self, action: #selector(ViewControllerAddServices.gotoEditServices))
             self.navigationItem.rightBarButtonItem  = testUIBarButtonItem
@@ -122,6 +134,20 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
         }
     }
    
+    
+    func CountNoOfData() -> Int {
+        let request = NSFetchRequest(entityName: "TblServices")
+        
+        
+        do{
+            try tblServicesCount = moContext.executeFetchRequest(request) as! [TblServices]
+        }catch{
+            print("Error...!")
+        }
+        return tblServicesCount.count + 1
+    }
+    
+    
     override func viewWillAppear(animated: Bool) {
         self.navigationItem.title = "Add Services"
         self.navigationItem.hidesBackButton = false

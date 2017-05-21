@@ -16,4 +16,6 @@ class TblServices: NSManagedObject {
     @NSManaged var price:String
     @NSManaged var image: String
     @NSManaged var isIncome: Bool
+    @NSManaged var active: Bool
+    
 }
