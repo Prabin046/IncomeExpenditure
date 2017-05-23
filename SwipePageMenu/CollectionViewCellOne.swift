@@ -17,4 +17,5 @@ class CollectionViewCellOne: UICollectionViewCell {
     @IBOutlet weak var lbName: UILabel!
     
     
+    
 }

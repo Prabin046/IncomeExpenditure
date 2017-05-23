@@ -24,11 +24,15 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
     @IBOutlet weak var myView: UIView!
     @IBOutlet weak var barBtnMenu: UIBarButtonItem!
     @IBOutlet weak var barbtnResult: UIBarButtonItem!
+    
+    
+    
 
     
           override func viewDidLoad() {
         super.viewDidLoad()
-        //navigationController?.navigationBar.hidden = true
+            
+                   //navigationController?.navigationBar.hidden = true
         barBtnMenu.target = revealViewController()
         barBtnMenu.action = #selector(SWRevealViewController.revealToggle(_:))
        
@@ -57,7 +61,10 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
        let parameters: [CAPSPageMenuOption] = [
             .MenuItemSeparatorWidth(4.3),
             .UseMenuLikeSegmentedControl(true),
-            .MenuItemSeparatorPercentageHeight(0.1)
+            .MenuItemSeparatorPercentageHeight(0.1),
+            .ScrollMenuBackgroundColor(UIColor.lightGrayColor())
+        
+        
         ]
  
         // Initialize page menu with controller array, frame, and optional parameters

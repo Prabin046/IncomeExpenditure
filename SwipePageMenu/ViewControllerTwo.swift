@@ -118,6 +118,11 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
         self.collectionView2.reloadData()
         
     }
+    //Saving Data In Database For the First Time
+    func InsertServicesInDatabaseForFirstTime()  {
+                
+        
+    }
 
 
     override func viewWillAppear(animated: Bool) {

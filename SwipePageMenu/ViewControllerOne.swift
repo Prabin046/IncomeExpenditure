@@ -13,6 +13,10 @@ import Foundation
 
 class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, delegateLoadServicesInArray{
 
+    
+    let hasLaunchedKey = "HasLaunched"
+    let defaults = NSUserDefaults.standardUserDefaults()
+
     var collectionView: UICollectionView?
     var screenSize: CGRect!
     var screenWidth: CGFloat!
@@ -35,15 +39,22 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
     
     
-    let defaults = NSUserDefaults.standardUserDefaults()
+    //let defaults = NSUserDefaults.standardUserDefaults()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let hasLaunched = defaults.boolForKey(hasLaunchedKey)
         
+        if !hasLaunched {
+            //print("Hello for first Time")
+            InsertServicesInDatabaseForFirstTime()
+            defaults.setBool(true, forKey: hasLaunchedKey)
+        }
+
         
 
-        //InsertServicesInDatabaseForFirstTime()
+        
         //loadServicesInArray()
         
        // self.btnResult.layer.cornerRadius = self.btnResult.frame.width/2
@@ -69,6 +80,8 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
     //Saving Data In Database For the First Time
     func InsertServicesInDatabaseForFirstTime()  {
+        
+        // Saving Income
         let name = ["कपाल काटेको","बच्चाको कपाल काटेको (१० बर्ष मुनिको )","दार्ही काटेको","सेम्पु गरेको","हेयर डराई गरेको","कपाल कालो गरेको","कपाल रातो गरेको","फेसियल गरेको","फेसवास गरेको","फचे ब्लीच गरेको"]
         let numbers = ["100", "70", "60","100","100", "350", "450","800","250", "450"]
         
@@ -93,6 +106,31 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
          }
          }
         
+        
+        // Saving Expense
+        let nameExpense = ["Blade Kineko","Khana Khayeko","Sicssor Kineko","Laptop Kineko","Salary Diyeko","House Rent","Cloth Kineko","Chair Kineko","Drinking Water","Carpet"]
+        let numbersExpense = ["10", "70", "60","100","100", "350", "450","800","250", "450"]
+        
+        
+        
+        
+        for i in 0..<nameExpense.count{
+            let newEntry = NSEntityDescription.insertNewObjectForEntityForName("TblServices", inManagedObjectContext: context)
+            
+            newEntry.setValue(String(i + 1 + name.count), forKey: "id")
+            newEntry.setValue(nameExpense[i], forKey: "name")
+            newEntry.setValue(numbersExpense[i], forKey: "price")
+            newEntry.setValue(String(i + 1), forKey: "image")
+            newEntry.setValue(0, forKey: "isIncome")
+            newEntry.setValue(1, forKey: "active")
+            
+            do{
+                try context.save()
+            }catch{
+                print("Error...!")
+            }
+        }
+
 
     }
     func loadServicesInArray()  {
