@@ -99,7 +99,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         
         
         let request = NSFetchRequest(entityName: "TblServices")
-        let predicate = NSPredicate(format: "active contains 1")
+        let predicate = NSPredicate(format: "active contains 1 AND isIncome contains 1")
         request.predicate = predicate
         
         do{

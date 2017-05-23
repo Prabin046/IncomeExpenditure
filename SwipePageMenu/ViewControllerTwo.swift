@@ -26,6 +26,9 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
     @IBOutlet weak var collectionView2: UICollectionView!
     @IBOutlet var viewControllerTwo: UIView!
     
+    var tblServices = [TblServices]()
+    let moContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    
     internal var noOfDataInTable = Int()
     let date : String = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.MediumStyle, timeStyle: NSDateFormatterStyle.NoStyle)
 
@@ -45,46 +48,24 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
         layout.minimumInteritemSpacing = 10
         layout.minimumLineSpacing = 10
         collectionView2!.collectionViewLayout = layout
+        
+        loadServicesInArray()
 
-        let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let context : NSManagedObjectContext = appDel.managedObjectContext
-
-        do{
-            let request = NSFetchRequest(entityName: "TblServices")
-            let results = try context.executeFetchRequest(request)
-            
-            if results.count > 0 {
-                for item in results as! [NSManagedObject]{
-                    
-                    
-                    let name  = String(item.valueForKey("name")!)
-                    let price = String(item.valueForKey("price")!)
-                    
-                    
-                    nameArray.append(name)
-                    priceArray.append(price)
-                    
-                    
-                                       
-                }
-            }
-        }catch{
-            print("Error...!")
-        }
-
+       
     }
     
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.nameArray.count
+        return tblServices.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell2", forIndexPath: indexPath) as! CollectionViewCellTwo
        
-        cell.Image2?.image = UIImage(named: nameArray[indexPath.row])
-        cell.lbName2?.text = self.nameArray[indexPath.row]
-        cell.lbNumber2?.text = "Rs. " + self.priceArray[indexPath.row]
+        let tblService1 = tblServices[indexPath.row]
+        cell.Image2?.image = UIImage(named: tblService1.image)
+        cell.lbName2?.text = tblService1.name
+        cell.lbNumber2?.text = "Rs. " + tblService1.price
         return cell
     }
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
@@ -122,7 +103,22 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
    
         
     }
-    
+    func loadServicesInArray()  {
+        
+        
+        let request = NSFetchRequest(entityName: "TblServices")
+        let predicate = NSPredicate(format: "active contains 1 AND isIncome contains 0")
+        request.predicate = predicate
+        
+        do{
+            try tblServices = moContext.executeFetchRequest(request) as! [TblServices]
+        }catch{
+            print("Error...!")
+        }
+        self.collectionView2.reloadData()
+        
+    }
+
 
     override func viewWillAppear(animated: Bool) {
         tbResult2.text = "Rs "
