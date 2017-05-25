@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 import Foundation
 
-class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, delegateLoadServicesInArrayExpense{
 
     
     var collectionView: UICollectionView?
@@ -49,7 +49,7 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
         layout.minimumLineSpacing = 10
         collectionView2!.collectionViewLayout = layout
         
-        loadServicesInArray()
+        loadServicesInArrayExpense()
 
        
     }
@@ -72,7 +72,8 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
         let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
 
-        tbResult2.text = "Rs -" + priceArray[indexPath.row]
+        let tblService1 = tblServices[indexPath.row]
+        tbResult2.text = "Rs -" + tblService1.price
         //COUNTING NO OF DATA IN TABLE
         do{
             let request = NSFetchRequest(entityName: "Entity")
@@ -87,9 +88,9 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
         newEntry.setValue(noOfDataInTable, forKey: "id")
         
         
-        newEntry.setValue(nameArray[indexPath.row], forKey: "name")
+        newEntry.setValue(tblService1.name, forKey: "name")
         
-        newEntry.setValue(Float(priceArray[indexPath.row]), forKey: "price")
+        newEntry.setValue(Float(tblService1.price), forKey: "price")
         newEntry.setValue(0, forKey: "isIncome")
         newEntry.setValue(date, forKey: "date")
         
@@ -103,7 +104,7 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
    
         
     }
-    func loadServicesInArray()  {
+    func loadServicesInArrayExpense()  {
         
         
         let request = NSFetchRequest(entityName: "TblServices")

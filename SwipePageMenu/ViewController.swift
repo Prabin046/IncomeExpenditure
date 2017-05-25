@@ -11,15 +11,21 @@ import PageMenu
 
 protocol delegateLoadServicesInArray {
     func loadServicesInArray()
+    func switchIncomeExpensePanel()
 }
 
+protocol delegateLoadServicesInArrayExpense {
+    func loadServicesInArrayExpense()
+    
+}
 
 class ViewController: UIViewController, CAPSPageMenuDelegate{
     
     var delegate: delegateLoadServicesInArray?
+    var delegateExpense: delegateLoadServicesInArrayExpense?
     var pageMenu : CAPSPageMenu?
     
-    
+    let defaultValue = NSUserDefaults.standardUserDefaults()
     
     @IBOutlet weak var myView: UIView!
     @IBOutlet weak var barBtnMenu: UIBarButtonItem!
@@ -51,8 +57,8 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
         controller1.title = "Income"
         controllerArray.append(controller1)
         
-        let controller2 : UIViewController = (self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerTwo"))!
-
+        let controller2 : ViewControllerTwo = (self.storyboard?.instantiateViewControllerWithIdentifier("ViewControllerTwo"))as! ViewControllerTwo
+             self.delegateExpense = controller2
         controller2.title = "Expense"
         controllerArray.append(controller2)
         
@@ -60,9 +66,11 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
         // Example:
        let parameters: [CAPSPageMenuOption] = [
             .MenuItemSeparatorWidth(4.3),
-            .UseMenuLikeSegmentedControl(true),
+            .UseMenuLikeSegmentedControl(false),
             .MenuItemSeparatorPercentageHeight(0.1),
-            .ScrollMenuBackgroundColor(UIColor.lightGrayColor())
+            .ScrollMenuBackgroundColor(UIColor.lightGrayColor()),
+            .SelectedMenuItemLabelColor (UIColor.whiteColor()),
+            .UnselectedMenuItemLabelColor (UIColor.darkGrayColor())
         
         
         ]
@@ -101,7 +109,8 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
     
     
     func willMoveToPage(controller: UIViewController, index: Int){
-        
+        //print(index)
+        delegate?.switchIncomeExpensePanel()
     }
     
     func didMoveToPage(controller: UIViewController, index: Int){
@@ -109,8 +118,18 @@ class ViewController: UIViewController, CAPSPageMenuDelegate{
     }
     
     override func viewWillAppear(animated: Bool) {
-        delegate?.loadServicesInArray()
         
+        
+        
+        
+        if let name = defaultValue.stringForKey("isIncomePanelCheck") {
+            if name == "1"{
+                delegate?.loadServicesInArray()
+            }
+            else if name == "0"{
+              delegateExpense?.loadServicesInArrayExpense()
+            }
+        }
     }
 
     

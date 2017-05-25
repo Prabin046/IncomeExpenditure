@@ -16,6 +16,8 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     @IBOutlet weak var imageViewSelected: UIImageView!
     @IBOutlet weak var collectionViewAddServices: UICollectionView!
     
+    let defaultValue = NSUserDefaults.standardUserDefaults()
+    
     var tblServices:TblServices?
     var tblServicesCount = [TblServices]()
     internal var noOfDataInTable = Int()
@@ -69,7 +71,16 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
         tblServices?.name = tbName.text!
         tblServices?.price = tbPrice.text!
         tblServices?.image = String(tempImageName)
-        tblServices?.isIncome = Bool(1)
+        if let name = defaultValue.stringForKey("isIncomePanelCheck") {
+            if name == "1"
+            {
+               tblServices?.isIncome = Bool(1)
+            }else{
+                tblServices?.isIncome = Bool(0)
+            }
+        
+        }
+        
         tblServices?.active = Bool(1)
         //Finally we issue the command to save the data
         

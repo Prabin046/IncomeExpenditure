@@ -10,9 +10,21 @@ import UIKit
 import CoreData
 import Foundation
     
-
+    protocol delegateIsIncomePanel {
+        func isIncomePanelCheckValuePass(data: Int)
+    }
 class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, delegateLoadServicesInArray{
 
+    
+    let defaultValue = NSUserDefaults.standardUserDefaults()
+    
+    
+    
+    var delegate: delegateIsIncomePanel?
+    
+    var isIncomePanel = 0
+    
+    
     
     let hasLaunchedKey = "HasLaunched"
     let defaults = NSUserDefaults.standardUserDefaults()
@@ -26,6 +38,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     var nameArray: [String] = []
     var priceArray: [String] = []
     var imageArray: [String] = []
+    
     @IBOutlet weak var tbResult: UITextField!
     @IBOutlet weak var collectionView1: UICollectionView!
     @IBOutlet var viewControllerOne: UIView!
@@ -43,7 +56,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        defaultValue.setObject("1", forKey: "isIncomePanelCheck")
         let hasLaunched = defaults.boolForKey(hasLaunchedKey)
         
         if !hasLaunched {
@@ -212,6 +225,30 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
        override func viewWillDisappear(animated: Bool) {
         tbResult.text = "Rs "
+       
+
     }
    
-}
+    func switchIncomeExpensePanel()  {
+        if isIncomePanel == 0
+        {
+            isIncomePanel = 1
+            defaultValue.setObject("0", forKey: "isIncomePanelCheck")
+        }else if isIncomePanel == 1
+        {
+            isIncomePanel = 0
+            defaultValue.setObject("1", forKey: "isIncomePanelCheck")
+        }
+       // print(isIncomePanel)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "segueEdit"{
+        let destController : TableViewControllerEditServices = (self.storyboard?.instantiateViewControllerWithIdentifier("TableViewControllerEditServices")) as! TableViewControllerEditServices
+        self.delegate = destController
+        
+        
+        delegate?.isIncomePanelCheckValuePass(isIncomePanel)
+        }
+    }
+   }

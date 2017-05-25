@@ -11,9 +11,13 @@ import CoreData
 import Foundation
 
 
-class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UITableViewDataSource, delegateIsIncomePanel{
 
+    
+    var isIncomePanel = "1"
+    
     @IBOutlet weak var tableView: UITableView!
+    
        
     
     
@@ -28,14 +32,20 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let defaultValue = NSUserDefaults.standardUserDefaults()
+        if let name = defaultValue.stringForKey("isIncomePanelCheck") {
+            isIncomePanel = name
+        }
+       //loadServicesInArray()
         
         
             }
     
     func loadServicesInArray()  {
-       
+        //print(isIncomePanel)
         let request = NSFetchRequest(entityName: "TblServices")
-        let predicate = NSPredicate(format: "active contains 1")
+        
+        let predicate = NSPredicate(format: "active contains 1 AND isIncome contains %@",isIncomePanel )
         request.predicate = predicate
         
         do{
@@ -43,6 +53,8 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
         }catch{
             print("Error...!")
         }
+        
+        
        self.tableView.reloadData()
     
         
@@ -104,13 +116,23 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
    
     
     override func viewWillAppear(animated: Bool) {
-        loadServicesInArray()
+       loadServicesInArray()
         self.navigationController?.navigationBar.hidden = false
         self.navigationItem.hidesBackButton = false
-        self.navigationItem.title = "Add/Edit Services"
+        
+        if isIncomePanel == "1"
+        {
+         self.navigationItem.title = "Add/Edit Income"
+        }else
+        {
+        self.navigationItem.title = "Add/Edit Expense"
+        }
+        
         
         let testUIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target:self, action: #selector(TableViewControllerEditServices.gotoAddServices))
         self.navigationItem.rightBarButtonItem  = testUIBarButtonItem
+        
+        
     }
     override func viewWillDisappear(animated: Bool) {
         self.navigationItem.title = nil
@@ -131,6 +153,12 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
         }
     }
     
+    func isIncomePanelCheckValuePass(data: Int){
+        
+        //print(isIncomePanel)
+        //loadServicesInArray()
+        
+    }
 
 
 }

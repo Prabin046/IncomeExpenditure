@@ -36,10 +36,10 @@
                                     <segue destination="ry6-II-aD1" kind="show" id="XVn-3D-7B0"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Edit" id="Osa-ey-ef8">
+                            <barButtonItem title="Edit" id="Osa-ey-ef8" customClass="segueEdit">
                                 <connections>
                                     <action selector="barBtnEdit:" destination="gsI-fU-IPW" id="UON-dJ-r4b"/>
-                                    <segue destination="obr-eP-jFM" kind="show" identifier="" id="kAT-cs-Xj9"/>
+                                    <segue destination="obr-eP-jFM" kind="show" id="qle-Qd-80H"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -171,19 +171,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="110" height="110"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="90V-Jb-tQs">
-                                                    <rect key="frame" x="-2" y="73" width="117" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="90V-Jb-tQs">
+                                                    <rect key="frame" x="-3" y="73" width="117" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BNZ-qy-ySO">
-                                                    <rect key="frame" x="13" y="8" width="74" height="59"/>
-                                                    <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <gestureRecognizers/>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ZQ-IC-1xO">
-                                                    <rect key="frame" x="0.0" y="87" width="117" height="28"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3ZQ-IC-1xO">
+                                                    <rect key="frame" x="-2" y="82" width="112" height="28"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="28" id="rgh-qv-8fC"/>
@@ -192,6 +187,11 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BNZ-qy-ySO">
+                                                    <rect key="frame" x="20" y="8" width="69" height="54"/>
+                                                    <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <gestureRecognizers/>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
@@ -200,7 +200,10 @@
                                             <constraint firstItem="BNZ-qy-ySO" firstAttribute="leading" secondItem="3ZQ-IC-1xO" secondAttribute="leading" constant="22" id="4we-s6-DBG"/>
                                             <constraint firstItem="BNZ-qy-ySO" firstAttribute="trailing" secondItem="3ZQ-IC-1xO" secondAttribute="trailing" constant="-21" id="HR6-wE-ve1"/>
                                             <constraint firstItem="3ZQ-IC-1xO" firstAttribute="top" secondItem="BNZ-qy-ySO" secondAttribute="bottom" constant="20" id="MAC-T8-PnK"/>
+                                            <constraint firstItem="90V-Jb-tQs" firstAttribute="centerX" secondItem="uhe-3Y-ioF" secondAttribute="centerX" id="SeV-uU-6dW"/>
                                             <constraint firstItem="BNZ-qy-ySO" firstAttribute="top" secondItem="uhe-3Y-ioF" secondAttribute="top" constant="8" id="V6n-SJ-AAu"/>
+                                            <constraint firstItem="90V-Jb-tQs" firstAttribute="leading" secondItem="uhe-3Y-ioF" secondAttribute="leadingMargin" constant="-11" id="XYq-72-FEG"/>
+                                            <constraint firstItem="90V-Jb-tQs" firstAttribute="top" secondItem="BNZ-qy-ySO" secondAttribute="bottom" constant="11" id="Y8T-qF-TGT"/>
                                             <constraint firstAttribute="trailing" secondItem="BNZ-qy-ySO" secondAttribute="trailing" constant="21" id="ksY-Wi-TwO"/>
                                             <constraint firstItem="BNZ-qy-ySO" firstAttribute="leading" secondItem="uhe-3Y-ioF" secondAttribute="leading" constant="20" id="mye-19-89K"/>
                                             <constraint firstAttribute="bottom" secondItem="3ZQ-IC-1xO" secondAttribute="bottom" id="yYz-2W-o7G"/>
@@ -567,6 +570,7 @@
                         </constraints>
                     </view>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="bdQ-ue-GBw"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="tableView" destination="fnN-jF-izO" id="lPG-r5-zln"/>
