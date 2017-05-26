@@ -21,7 +21,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     var tblServices:TblServices?
     var tblServicesCount = [TblServices]()
     internal var noOfDataInTable = Int()
-    var tempImageName = 0
+    var tempImageName = ""
     
     let moContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
     
@@ -58,6 +58,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
             tbName.text = t.name
             tbPrice.text = t.price
             imageViewSelected.image = UIImage(named: t.image)
+            tempImageName = t.image
         }
         noOfDataInTable = CountNoOfData()
         // Do any additional setup after loading the view.
@@ -85,7 +86,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
         tblServices?.id = String(noOfDataInTable)
         tblServices?.name = tbName.text!
         tblServices?.price = tbPrice.text!
-        tblServices?.image = String(tempImageName)
+        tblServices?.image = tempImageName
         if let name = defaultValue.string(forKey: "isIncomePanelCheck") {
             if name == "1"
             {
@@ -130,8 +131,8 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         imageViewSelected.image = UIImage(named: imageArray[indexPath.row])
-        tempImageName = Int(imageArray[indexPath.row])!
-        print(tempImageName)
+        tempImageName = imageArray[indexPath.row]
+        //print(tempImageName)
         checkAllField()
     }
     
