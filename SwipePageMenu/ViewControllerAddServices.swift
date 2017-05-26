@@ -16,19 +16,34 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     @IBOutlet weak var imageViewSelected: UIImageView!
     @IBOutlet weak var collectionViewAddServices: UICollectionView!
     
-    let defaultValue = NSUserDefaults.standardUserDefaults()
+    let defaultValue = UserDefaults.standard
     
     var tblServices:TblServices?
     var tblServicesCount = [TblServices]()
     internal var noOfDataInTable = Int()
     var tempImageName = 0
     
-    let moContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    let moContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
     
-    var imageArray: [String] = ["1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10"]
+    var imageArrayIncome: [String] = ["101","102","103","104","105","106","107","108","109","110","101","102","103","104","105","106","107","108","109","110","101","102","103","104","105","106","107","108","109","110"]
+    var imageArrayExpense: [String] = ["201","202","203","204","205","206","207","208","209","210","201","202","203","204","205","206","207","208","209","210","201","202","203","204","205","206","207","208","209","210"]
+    var imageArray : [String] = []
+    
+    
     var donebuttonCheck = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let nameImageArray = defaultValue.string(forKey: "isIncomePanelCheck") {
+            if nameImageArray == "1"
+            {
+                imageArray = imageArrayIncome
+            }else{
+                imageArray = imageArrayExpense
+            }
+            //print(imageArray)
+            
+        }
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewControllerAddServices.dismissKeyboard))
         
@@ -53,7 +68,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     }
     func  gotoEditServices() {
         SaveServicesInDatabase()
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
                 
     }
     
@@ -61,9 +76,9 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
         //Get the Description of the entity
         if (tblServices == nil)
         {
-        let tblServicesDescription = NSEntityDescription.entityForName("TblServices", inManagedObjectContext: moContext)
+        let tblServicesDescription = NSEntityDescription.entity(forEntityName: "TblServices", in: moContext)
         // Creating Managed Object to be inserted into the core data
-        tblServices = TblServices(entity: tblServicesDescription!, insertIntoManagedObjectContext: moContext)
+        tblServices = TblServices(entity: tblServicesDescription!, insertInto: moContext)
         }
         
         // Set the attributes
@@ -71,7 +86,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
         tblServices?.name = tbName.text!
         tblServices?.price = tbPrice.text!
         tblServices?.image = String(tempImageName)
-        if let name = defaultValue.stringForKey("isIncomePanelCheck") {
+        if let name = defaultValue.string(forKey: "isIncomePanelCheck") {
             if name == "1"
             {
                tblServices?.isIncome = Bool(1)
@@ -100,32 +115,33 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     
     
     
-        func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.imageArray.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
        
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cellImage", forIndexPath: indexPath) as! CollectionViewCellAddServices
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellImage", for: indexPath) as! CollectionViewCellAddServices
         cell.imageView.image = UIImage(named: imageArray[indexPath.row])
         return cell
     }
     
     
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         imageViewSelected.image = UIImage(named: imageArray[indexPath.row])
         tempImageName = Int(imageArray[indexPath.row])!
+        print(tempImageName)
         checkAllField()
     }
     
     
-    @IBAction func nameEditingChanged(sender: AnyObject) {
+    @IBAction func nameEditingChanged(_ sender: AnyObject) {
         
         checkAllField()
     }
     
-    @IBAction func priceEditingChanged(sender: AnyObject) {
+    @IBAction func priceEditingChanged(_ sender: AnyObject) {
         
         checkAllField()
     }
@@ -133,7 +149,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     func checkAllField() {
         if(tbPrice.text != "" && tbName.text != "" && imageViewSelected.image != nil)
         {
-            let testUIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target:self, action: #selector(ViewControllerAddServices.gotoEditServices))
+            let testUIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target:self, action: #selector(ViewControllerAddServices.gotoEditServices))
             self.navigationItem.rightBarButtonItem  = testUIBarButtonItem
             donebuttonCheck = 1
         }else{
@@ -147,11 +163,11 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
    
     
     func CountNoOfData() -> Int {
-        let request = NSFetchRequest(entityName: "TblServices")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TblServices")
         
         
         do{
-            try tblServicesCount = moContext.executeFetchRequest(request) as! [TblServices]
+            try tblServicesCount = moContext.fetch(request) as! [TblServices]
         }catch{
             print("Error...!")
         }
@@ -159,7 +175,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.navigationItem.title = "Add Services"
         self.navigationItem.hidesBackButton = false
     }

@@ -11,12 +11,12 @@ import CoreData
 import Foundation
     
     protocol delegateIsIncomePanel {
-        func isIncomePanelCheckValuePass(data: Int)
+        func isIncomePanelCheckValuePass(_ data: Int)
     }
 class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, delegateLoadServicesInArray{
 
     
-    let defaultValue = NSUserDefaults.standardUserDefaults()
+    let defaultValue = UserDefaults.standard
     
     
     
@@ -27,7 +27,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
     
     let hasLaunchedKey = "HasLaunched"
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
 
     var collectionView: UICollectionView?
     var screenSize: CGRect!
@@ -44,9 +44,9 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     @IBOutlet var viewControllerOne: UIView!
     internal var totaladd = Int()
     internal var noOfDataInTable = Int()
-    let date : String = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.MediumStyle, timeStyle: NSDateFormatterStyle.NoStyle)
+    let date : String = DateFormatter.localizedString(from: Date(), dateStyle: DateFormatter.Style.medium, timeStyle: DateFormatter.Style.none)
 
-    let moContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    let moContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
     
     
     
@@ -56,13 +56,13 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        defaultValue.setObject("1", forKey: "isIncomePanelCheck")
-        let hasLaunched = defaults.boolForKey(hasLaunchedKey)
+        defaultValue.set("1", forKey: "isIncomePanelCheck")
+        let hasLaunched = defaults.bool(forKey: hasLaunchedKey)
         
         if !hasLaunched {
             //print("Hello for first Time")
             InsertServicesInDatabaseForFirstTime()
-            defaults.setBool(true, forKey: hasLaunchedKey)
+            defaults.set(true, forKey: hasLaunchedKey)
         }
 
         
@@ -75,7 +75,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         
         
         //Codes for Layout of HomePage
-        screenSize = UIScreen.mainScreen().bounds
+        screenSize = UIScreen.main.bounds
         screenWidth = screenSize.width
         screenHeight = screenSize.height
         
@@ -98,17 +98,21 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         let name = ["कपाल काटेको","बच्चाको कपाल काटेको (१० बर्ष मुनिको )","दार्ही काटेको","सेम्पु गरेको","हेयर डराई गरेको","कपाल कालो गरेको","कपाल रातो गरेको","फेसियल गरेको","फेसवास गरेको","फचे ब्लीच गरेको"]
         let numbers = ["100", "70", "60","100","100", "350", "450","800","250", "450"]
         
+        var imageArrayIncome: [String] = ["101","102","103","104","105","106","107","108","109","110"]
+        
 
-        let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+
+        let appDel : AppDelegate = UIApplication.shared.delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
         
         for i in 0..<name.count{
-         let newEntry = NSEntityDescription.insertNewObjectForEntityForName("TblServices", inManagedObjectContext: context)
+         let newEntry = NSEntityDescription.insertNewObject(forEntityName: "TblServices", into: context)
          
          newEntry.setValue(String(i + 1), forKey: "id")
          newEntry.setValue(name[i], forKey: "name")
          newEntry.setValue(numbers[i], forKey: "price")
-         newEntry.setValue(String(i + 1), forKey: "image")
+         newEntry.setValue(imageArrayIncome[i], forKey: "image")
          newEntry.setValue(1, forKey: "isIncome")
          newEntry.setValue(1, forKey: "active")
         
@@ -124,16 +128,16 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         let nameExpense = ["Blade Kineko","Khana Khayeko","Sicssor Kineko","Laptop Kineko","Salary Diyeko","House Rent","Cloth Kineko","Chair Kineko","Drinking Water","Carpet"]
         let numbersExpense = ["10", "70", "60","100","100", "350", "450","800","250", "450"]
         
-        
+        var imageArrayExpense: [String] = ["201","202","203","204","205","206","207","208","209","210"]
         
         
         for i in 0..<nameExpense.count{
-            let newEntry = NSEntityDescription.insertNewObjectForEntityForName("TblServices", inManagedObjectContext: context)
+            let newEntry = NSEntityDescription.insertNewObject(forEntityName: "TblServices", into: context)
             
             newEntry.setValue(String(i + 1 + name.count), forKey: "id")
             newEntry.setValue(nameExpense[i], forKey: "name")
             newEntry.setValue(numbersExpense[i], forKey: "price")
-            newEntry.setValue(String(i + 1), forKey: "image")
+            newEntry.setValue(imageArrayExpense[i], forKey: "image")
             newEntry.setValue(0, forKey: "isIncome")
             newEntry.setValue(1, forKey: "active")
             
@@ -149,12 +153,12 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     func loadServicesInArray()  {
         
         
-        let request = NSFetchRequest(entityName: "TblServices")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TblServices")
         let predicate = NSPredicate(format: "active contains 1 AND isIncome contains 1")
         request.predicate = predicate
         
         do{
-            try tblServices = moContext.executeFetchRequest(request) as! [TblServices]
+            try tblServices = moContext.fetch(request) as! [TblServices]
         }catch{
             print("Error...!")
         }
@@ -164,12 +168,12 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
     
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tblServices.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("cell", forIndexPath: indexPath) as! CollectionViewCellOne
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCellOne
         let tblService1 = tblServices[indexPath.row]
         cell.Image1?.image = UIImage(named: tblService1.image)
         cell.lbName?.text = tblService1.name
@@ -179,9 +183,9 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
     
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //Storing Data in Database
-        let appDel : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDel : AppDelegate = UIApplication.shared.delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
         
         
@@ -192,8 +196,8 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         //tbResult.text = "Rs " + priceArray[indexPath.row]
         //COUNTING NO OF DATA IN TABLE
         do{
-            let request = NSFetchRequest(entityName: "Entity")
-            let results = try context.executeFetchRequest(request)
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Entity")
+            let results = try context.fetch(request)
             noOfDataInTable = results.count + 1
             
            
@@ -202,7 +206,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         }
         
         
-        let newEntry = NSEntityDescription.insertNewObjectForEntityForName("Entity", inManagedObjectContext: context)
+        let newEntry = NSEntityDescription.insertNewObject(forEntityName: "Entity", into: context)
         newEntry.setValue(noOfDataInTable, forKey: "id")
         
         
@@ -223,7 +227,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         
    
     
-       override func viewWillDisappear(animated: Bool) {
+       override func viewWillDisappear(_ animated: Bool) {
         tbResult.text = "Rs "
        
 
@@ -233,18 +237,18 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         if isIncomePanel == 0
         {
             isIncomePanel = 1
-            defaultValue.setObject("0", forKey: "isIncomePanelCheck")
+            defaultValue.set("0", forKey: "isIncomePanelCheck")
         }else if isIncomePanel == 1
         {
             isIncomePanel = 0
-            defaultValue.setObject("1", forKey: "isIncomePanelCheck")
+            defaultValue.set("1", forKey: "isIncomePanelCheck")
         }
        // print(isIncomePanel)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueEdit"{
-        let destController : TableViewControllerEditServices = (self.storyboard?.instantiateViewControllerWithIdentifier("TableViewControllerEditServices")) as! TableViewControllerEditServices
+        let destController : TableViewControllerEditServices = (self.storyboard?.instantiateViewController(withIdentifier: "TableViewControllerEditServices")) as! TableViewControllerEditServices
         self.delegate = destController
         
         

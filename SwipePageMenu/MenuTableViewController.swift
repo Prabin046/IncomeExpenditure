@@ -17,24 +17,24 @@ class MenuTableViewController: UIViewController, UITableViewDelegate, UITableVie
          menuItemArray = ["Home", "Result", "Edit"]
 
         }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menuItemArray.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("MenuTableViewCell", forIndexPath: indexPath) as! MenuTableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MenuTableViewCell", for: indexPath) as! MenuTableViewCell
         cell.lbMenuItem.text = menuItemArray[indexPath.row]
         return cell
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
          let revealViewController:SWRevealViewController = self.revealViewController()
          
-         let cell:MenuTableViewCell = tableView.cellForRowAtIndexPath(indexPath) as! MenuTableViewCell
+         let cell:MenuTableViewCell = tableView.cellForRow(at: indexPath) as! MenuTableViewCell
         
         if cell.lbMenuItem.text == "Home"
          {
             let mainStoryBoard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let desController = mainStoryBoard.instantiateViewControllerWithIdentifier("ViewController") as! ViewController
+            let desController = mainStoryBoard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
             let newFrontViewController = UINavigationController.init(rootViewController: desController)
             revealViewController.pushFrontViewController(newFrontViewController, animated: true)
             

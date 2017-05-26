@@ -20,7 +20,7 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
     
     var tempIncome = 0
     var tempExpense = 0
-    let date : String = NSDateFormatter.localizedStringFromDate(NSDate(), dateStyle: NSDateFormatterStyle.MediumStyle, timeStyle: NSDateFormatterStyle.NoStyle)
+    let date : String = DateFormatter.localizedString(from: Date(), dateStyle: DateFormatter.Style.medium, timeStyle: DateFormatter.Style.none)
     
     
     
@@ -44,23 +44,23 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
         // Do any additional setup after loading the view.
        // self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         //self.navigationItem.hidesBackButton = false
-        let appDele : AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDele : AppDelegate = UIApplication.shared.delegate as! AppDelegate
         let context : NSManagedObjectContext = appDele.managedObjectContext
 
         
         do{
-            let request = NSFetchRequest(entityName: "Entity")
-            let results = try context.executeFetchRequest(request)
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Entity")
+            let results = try context.fetch(request)
             var i = 0
             if results.count > 0 {
                 for item in results as! [NSManagedObject]{
                     
-                    if (String(item.valueForKey("date")!) == date)
+                    if (String(describing: item.value(forKey: "date")!) == date)
                     {
-                    let name  = String(item.valueForKey("name")!)
-                    let price = String(item.valueForKey("price")!)
-                    let date = String(item.valueForKey("date")!)
-                    let isIncome = String(item.valueForKey("isIncome")!)
+                    let name  = String(describing: item.value(forKey: "name")!)
+                    let price = String(describing: item.value(forKey: "price")!)
+                    let date = String(describing: item.value(forKey: "date")!)
+                    let isIncome = String(describing: item.value(forKey: "isIncome")!)
                     
                     nameArray.append(name)
                     priceArray.append(price)
@@ -105,13 +105,13 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
     }
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
                 
                 return nameArray.count
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! TableViewCellResult
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TableViewCellResult
        
         cell.lbNameTableCell.text = nameArray[indexPath.row]
         cell.lbPriceTableCell.text = priceArray[indexPath.row]
@@ -119,16 +119,20 @@ class TotalViewController: UIViewController,UITableViewDataSource,UITableViewDel
         
         if (isIncomeArray[indexPath.row] == "1")
         {
-            cell.lbPriceTableCell.textColor = UIColor.blackColor()
+            cell.lbSnTableCell.textColor = UIColor.black
+            cell.lbNameTableCell.textColor = UIColor.black
+            cell.lbPriceTableCell.textColor = UIColor.black
         }else{
-            cell.lbPriceTableCell.textColor = UIColor.redColor()
+            cell.lbSnTableCell.textColor = UIColor.red
+            cell.lbNameTableCell.textColor = UIColor.red
+            cell.lbPriceTableCell.textColor = UIColor.red
         }
         return(cell)
             }
     
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         self.tableViewIncomeExpense.reloadData()
         //self.navigationController?.navigationBarHidden = true
         self.navigationItem.hidesBackButton = false

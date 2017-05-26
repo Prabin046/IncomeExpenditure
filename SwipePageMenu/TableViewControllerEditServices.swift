@@ -21,7 +21,7 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
        
     
     
-    let moContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    let moContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
     //var nameArray: [String] = []
     //var priceArray: [String] = []
     var tblServices = [TblServices]()
@@ -32,8 +32,8 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let defaultValue = NSUserDefaults.standardUserDefaults()
-        if let name = defaultValue.stringForKey("isIncomePanelCheck") {
+        let defaultValue = UserDefaults.standard
+        if let name = defaultValue.string(forKey: "isIncomePanelCheck") {
             isIncomePanel = name
         }
        //loadServicesInArray()
@@ -43,13 +43,13 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
     
     func loadServicesInArray()  {
         //print(isIncomePanel)
-        let request = NSFetchRequest(entityName: "TblServices")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TblServices")
         
         let predicate = NSPredicate(format: "active contains 1 AND isIncome contains %@",isIncomePanel )
         request.predicate = predicate
         
         do{
-            try tblServices = moContext.executeFetchRequest(request) as! [TblServices]
+            try tblServices = moContext.fetch(request) as! [TblServices]
         }catch{
             print("Error...!")
         }
@@ -62,31 +62,31 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
     }
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tblServices.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! TableViewCellEditServices
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TableViewCellEditServices
         let tblService1 = tblServices[indexPath.row]
         cell.lbName?.text = tblService1.name
         cell.lbPrice.text = tblService1.price
         return cell
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         //let indexpath = self.tableView.indexPathForSelectedRow!
         let row = indexPath.row
         tblServicesdelete = tblServices[row]
-        if editingStyle == UITableViewCellEditingStyle.Delete
+        if editingStyle == UITableViewCellEditingStyle.delete
         {
             
             
@@ -115,9 +115,9 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
     
    
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
        loadServicesInArray()
-        self.navigationController?.navigationBar.hidden = false
+        self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.hidesBackButton = false
         
         if isIncomePanel == "1"
@@ -129,31 +129,31 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
         }
         
         
-        let testUIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target:self, action: #selector(TableViewControllerEditServices.gotoAddServices))
+        let testUIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target:self, action: #selector(TableViewControllerEditServices.gotoAddServices))
         self.navigationItem.rightBarButtonItem  = testUIBarButtonItem
         
         
     }
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         self.navigationItem.title = nil
     }
     func  gotoAddServices() {
         
-        performSegueWithIdentifier("segueAddServices", sender: self)
+        performSegue(withIdentifier: "segueAddServices", sender: self)
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueEditServices"
         {
-            let v = segue.destinationViewController as! ViewControllerAddServices
+            let v = segue.destination as! ViewControllerAddServices
             let indexpath = self.tableView.indexPathForSelectedRow!
             let row = indexpath.row
             v.tblServices = tblServices[row]
         }
     }
     
-    func isIncomePanelCheckValuePass(data: Int){
+    func isIncomePanelCheckValuePass(_ data: Int){
         
         //print(isIncomePanel)
         //loadServicesInArray()
