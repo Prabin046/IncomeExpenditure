@@ -274,8 +274,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         }
     }
     override func viewWillAppear(_ animated: Bool) {
-        let testUIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target:self, action: "gotoProfile")
-        self.navigationItem.leftBarButtonItem  = testUIBarButtonItem
+       
     }
     func gotoProfile() {
         func  gotoAddServices() {

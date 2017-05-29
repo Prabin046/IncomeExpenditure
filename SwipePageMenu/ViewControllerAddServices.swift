@@ -31,6 +31,7 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     
     
     var donebuttonCheck = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
