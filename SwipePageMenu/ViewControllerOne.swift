@@ -184,12 +184,30 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        //Cell Click Blink Effect
+        let cell1 = collectionView.cellForItem(at: indexPath) as! CollectionViewCellOne
+        
+        cell1.backgroundColor = UIColor.clear
+        let when = DispatchTime.now() + 0.05 // change 2 to desired number of seconds
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            cell1.backgroundColor = UIColor.white
+        }
+        
+        
+            
+        
+        
+        
         //Storing Data in Database
         let appDel : AppDelegate = UIApplication.shared.delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
         
         
+        
         let tblService1 = tblServices[indexPath.row]
+        // textfield animation
+        
         
         tbResult.text = "Rs " + tblService1.price
         
@@ -224,7 +242,7 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         }
         
     }
-        
+    
    
     
        override func viewWillDisappear(_ animated: Bool) {
@@ -254,5 +272,17 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
         
         delegate?.isIncomePanelCheckValuePass(isIncomePanel)
         }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        let testUIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target:self, action: "gotoProfile")
+        self.navigationItem.leftBarButtonItem  = testUIBarButtonItem
+    }
+    func gotoProfile() {
+        func  gotoAddServices() {
+            
+            performSegue(withIdentifier: "segueGotoProfile", sender: self)
+            
+        }
+        
     }
    }

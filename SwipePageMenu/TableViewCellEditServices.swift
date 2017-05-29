@@ -12,9 +12,14 @@ class TableViewCellEditServices: UITableViewCell {
 
     @IBOutlet weak var lbPrice: UILabel!
     @IBOutlet weak var lbName: UILabel!
+    
+    @IBOutlet weak var cellImage: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        cellImage.layer.cornerRadius = 10
+        cellImage.clipsToBounds = true
     }
     
 

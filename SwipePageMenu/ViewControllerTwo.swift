@@ -69,6 +69,17 @@ class ViewControllerTwo: UIViewController, UICollectionViewDelegate, UICollectio
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        //Cell Click Blink Effect
+        let cell1 = collectionView.cellForItem(at: indexPath) as! CollectionViewCellTwo
+        
+        cell1.backgroundColor = UIColor.clear
+        let when = DispatchTime.now() + 0.05 // change 2 to desired number of seconds
+        DispatchQueue.main.asyncAfter(deadline: when) {
+            cell1.backgroundColor = UIColor.white
+        }
+
+        
         let appDel : AppDelegate = UIApplication.shared.delegate as! AppDelegate
         let context : NSManagedObjectContext = appDel.managedObjectContext
 

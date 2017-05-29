@@ -71,6 +71,8 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
         let tblService1 = tblServices[indexPath.row]
         cell.lbName?.text = tblService1.name
         cell.lbPrice.text = tblService1.price
+        cell.cellImage.image = UIImage(named: tblService1.image)
+
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
