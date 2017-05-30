@@ -282,6 +282,7 @@
 				TargetAttributes = {
 					37CB3A121EB3126D00F252F7 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = HNG3Y7MP8N;
 						LastSwiftMigration = 0830;
 					};
 					37CB3A291EB3126E00F252F7 = {
@@ -629,7 +630,9 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = HNG3Y7MP8N;
 				INFOPLIST_FILE = SwipePageMenu/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Prabin.SwipePageMenu;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -646,7 +649,9 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = HNG3Y7MP8N;
 				INFOPLIST_FILE = SwipePageMenu/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Prabin.SwipePageMenu;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -9,7 +9,8 @@
 import UIKit
 import CoreData
 
-class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate {
+class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,
+UINavigationControllerDelegate {
 
     @IBOutlet weak var tbName: UITextField!
     @IBOutlet weak var tbPrice: UITextField!
@@ -34,6 +35,13 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Making Image view Clickable
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
+        imageViewSelected.isUserInteractionEnabled = true
+        imageViewSelected.addGestureRecognizer(tapGestureRecognizer)
+        
+        
         
         if let nameImageArray = defaultValue.string(forKey: "isIncomePanelCheck") {
             if nameImageArray == "1"
@@ -64,6 +72,56 @@ class ViewControllerAddServices: UIViewController,UICollectionViewDataSource,UIC
         noOfDataInTable = CountNoOfData()
         // Do any additional setup after loading the view.
     }
+    func imageTapped(tapGestureRecognizer: UITapGestureRecognizer)
+    {
+        //let tappedImage = tapGestureRecognizer.view as! UIImageView
+        
+        // Action to Perform
+        let alertVC = UIAlertController(
+            title: nil,
+            message: nil,
+            preferredStyle: .actionSheet)
+        let cameraAction = UIAlertAction(
+            title: "Camera",
+            style:.default,
+            handler:{ action in
+                self.accessCamera()
+        })
+            alertVC.addAction(cameraAction)
+        let libraryAction = UIAlertAction(
+            title: "Library",
+            style:.default,
+            handler: nil)
+        alertVC.addAction(libraryAction)
+        let cancelAction = UIAlertAction(
+            title: "Cancel",
+            style:.cancel,
+            handler: nil)
+        alertVC.addAction(cancelAction)
+        present(
+            alertVC,
+            animated: true,
+            completion: nil)
+        
+    }
+    
+    func accessCamera()
+    {
+        //print("you pressed Camera")
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
+            imagePicker.allowsEditing = false
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        imageViewSelected.image = image
+        self.dismiss(animated: true, completion: nil);
+    }
+    
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
