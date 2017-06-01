@@ -72,6 +72,20 @@ class TableViewControllerEditServices: UIViewController, UITableViewDelegate, UI
         cell.lbName?.text = tblService1.name
         cell.lbPrice.text = tblService1.price
         cell.cellImage.image = UIImage(named: tblService1.image)
+        //Load Manual Image
+        if (cell.cellImage.image == nil){
+            let nsDocumentDirectory = FileManager.SearchPathDirectory.documentDirectory
+            let nsUserDomainMask    = FileManager.SearchPathDomainMask.userDomainMask
+            let paths               = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+            if let dirPath          = paths.first
+            {
+                let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent(tblService1.image + ".png")
+                
+                cell.cellImage.image = UIImage(contentsOfFile: imageURL.path)
+                
+                
+            }
+        }
 
         return cell
     }

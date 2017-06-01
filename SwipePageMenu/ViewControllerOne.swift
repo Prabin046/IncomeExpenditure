@@ -186,11 +186,12 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
             if let dirPath          = paths.first
             {
                 let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent(tblService1.image + ".png")
-                let image    = UIImage(contentsOfFile: imageURL.path)
+                //let image    = UIImage(contentsOfFile: imageURL.path)
                 cell.Image1.image = UIImage(contentsOfFile: imageURL.path)
                 
                
-            }                       }
+            }
+        }
         cell.lbName?.text = tblService1.name
         cell.lbNumber?.text = "Rs. " + tblService1.price
         return cell
