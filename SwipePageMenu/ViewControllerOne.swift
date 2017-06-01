@@ -45,6 +45,8 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     internal var totaladd = Int()
     internal var noOfDataInTable = Int()
     let date : String = DateFormatter.localizedString(from: Date(), dateStyle: DateFormatter.Style.medium, timeStyle: DateFormatter.Style.none)
+    
+    
 
     let moContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
     
@@ -171,16 +173,35 @@ class ViewControllerOne: UIViewController, UICollectionViewDataSource, UICollect
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return tblServices.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCellOne
         let tblService1 = tblServices[indexPath.row]
         cell.Image1?.image = UIImage(named: tblService1.image)
+        
+        if (cell.Image1.image == nil){
+            let nsDocumentDirectory = FileManager.SearchPathDirectory.documentDirectory
+            let nsUserDomainMask    = FileManager.SearchPathDomainMask.userDomainMask
+            let paths               = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+            if let dirPath          = paths.first
+            {
+                let imageURL = URL(fileURLWithPath: dirPath).appendingPathComponent(tblService1.image + ".png")
+                let image    = UIImage(contentsOfFile: imageURL.path)
+                cell.Image1.image = UIImage(contentsOfFile: imageURL.path)
+                
+               
+            }                       }
         cell.lbName?.text = tblService1.name
         cell.lbNumber?.text = "Rs. " + tblService1.price
         return cell
     }
     
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

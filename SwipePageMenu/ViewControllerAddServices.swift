@@ -17,6 +17,10 @@ UINavigationControllerDelegate {
     @IBOutlet weak var imageViewSelected: UIImageView!
     @IBOutlet weak var collectionViewAddServices: UICollectionView!
     
+    
+    
+    
+    var userUploadImage = 0
     let defaultValue = UserDefaults.standard
     
     var tblServices:TblServices?
@@ -35,6 +39,7 @@ UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         //Making Image view Clickable
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
@@ -91,7 +96,9 @@ UINavigationControllerDelegate {
         let libraryAction = UIAlertAction(
             title: "Library",
             style:.default,
-            handler: nil)
+            handler: { action in
+                self.accessLibrary()
+        })
         alertVC.addAction(libraryAction)
         let cancelAction = UIAlertAction(
             title: "Cancel",
@@ -108,7 +115,8 @@ UINavigationControllerDelegate {
     func accessCamera()
     {
         //print("you pressed Camera")
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera
+            ) {
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
@@ -117,10 +125,41 @@ UINavigationControllerDelegate {
         }
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
-        imageViewSelected.image = image
-        self.dismiss(animated: true, completion: nil);
+    func accessLibrary(){
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
+            imagePicker.allowsEditing = false
+            self.present(imagePicker, animated: true, completion: nil)
+        }
     }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        let chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage //2
+        imageViewSelected.contentMode = .scaleAspectFill
+        imageViewSelected.clipsToBounds = true//3
+        imageViewSelected.image = chosenImage //4
+        userUploadImage = 1
+        
+        //Creating Random Name for Picture
+        let ticks = String(Date().ticks)
+        
+        
+        tempImageName = ticks
+        print("This is the Picture" + tempImageName)
+        // imageViewSelected.image = inf
+        checkAllField()
+        self.dismiss(animated: true, completion: nil);
+        
+    }
+    // Save Image in Mobile Memory
+    
+    
+    
+    
+    
     
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
@@ -163,15 +202,33 @@ UINavigationControllerDelegate {
         //Save the Object
         do{
             try moContext.save()
+            
         }catch{
             print("Error...!")
         }
+        if (userUploadImage == 1){
+         saveImageInDocumentDirectory()
+            userUploadImage = 0
+      
+        }
 
     }
+    func saveImageInDocumentDirectory(){
+        
+        if let image = imageViewSelected.image {
+            if let data = UIImagePNGRepresentation(image) {
+                let filename = getDocumentsDirectory().appendingPathComponent(tempImageName)
+                try? data.write(to: filename)
+            }
+        }
     
+    }
     
-    
-   
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
     
     
     
@@ -240,4 +297,10 @@ UINavigationControllerDelegate {
         self.navigationItem.hidesBackButton = false
     }
 
+}
+
+extension Date{
+    var ticks: UInt64{
+        return UInt64((self.timeIntervalSince1970))
+    }
 }
